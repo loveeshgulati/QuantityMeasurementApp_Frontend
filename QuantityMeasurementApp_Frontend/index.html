@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QMA — Quantity Measurement App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <nav class="navbar">
+    <div class="logo" onclick="showPage('home')">Q<span>MA</span></div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a onclick="showPage('login')" style="cursor:pointer">Login</a></li>
+      <li class="nav-cta"><a onclick="showPage('signup')" style="cursor:pointer">Get Started</a></li>
+    </ul>
+  </nav>
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Precision Measurement Tool</div>
+        <h1 class="hero-title">Measure.<br><span>Calculate.</span><br>Convert.</h1>
+        <p class="hero-sub">Perform arithmetic on lengths across different units — feet, inches, yards, centimetres — with full operation history and smart unit conversion.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showPage('app')">Try Now</button>
+          <button class="btn btn-outline" onclick="showPage('login')">Guest</button>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card">
+          <div class="hero-card-title">Available Operations</div>
+          <div class="mini-row"><span class="op-chip op-add">+</span> Add lengths in any units</div>
+          <div class="mini-row"><span class="op-chip op-sub">-</span> Subtract measurements</div>
+          <div class="mini-row"><span class="op-chip op-div">/</span> Divide and get ratios</div>
+          <div class="mini-row"><span class="op-chip op-cmp">=</span> Compare two values</div>
+          <div class="mini-row"><span class="op-chip op-cvt">~</span> Convert between units</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="features-strip" id="features">
+    <div class="section-eyebrow">Why QMA</div>
+    <div class="section-title">Everything for precision measurement</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon" style="background:#d1fae5"><span class="feat-emoji">&#128207;</span></div><h3>Length Units</h3><p>Feet, inches, yards, cm — mix freely.</p></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#dbeafe"><span class="feat-emoji">&#9889;</span></div><h3>Instant Results</h3><p>Backed by .NET 10 API with Redis caching.</p></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#ede9fe"><span class="feat-emoji">&#128274;</span></div><h3>Secure Auth</h3><p>JWT + BCrypt password hashing.</p></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#fef3c7"><span class="feat-emoji">&#128202;</span></div><h3>History</h3><p>All ops logged to SQL Server.</p></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#fce7f3"><span class="feat-emoji">&#128260;</span></div><h3>Conversion</h3><p>Convert any quantity seamlessly.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <nav class="navbar">
+    <div class="logo" onclick="showPage('home')">Q<span>MA</span></div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" style="cursor:pointer">&larr; Home</a></li>
+      <li class="nav-cta"><a onclick="showPage('signup')" style="cursor:pointer">Sign Up</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-ghost btn-sm" onclick="goBack()">← Go Back</button>
+    </div>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-form-col">
+      <div class="auth-panel">
+        <h2>Welcome back</h2>
+        <p class="sub">Sign in to your QMA account</p>
+        <div id="login-alert" class="alert alert-err"></div>
+        <div class="fields">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email"/>
+            <span class="field-error" id="login-email-err"></span>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="pw-toggle">
+              <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password"/>
+              <button type="button" onclick="togglePw('login-password',this)" tabindex="-1" class="pw-btn">Show</button>
+            </div>
+            <span class="field-error" id="login-pw-err"></span>
+          </div>
+          <button class="btn btn-primary btn-full" id="login-btn" onclick="doLogin()">
+            <div class="spin"></div><span>Sign In</span>
+          </button>
+        </div>
+        <div class="auth-switch">No account? <a onclick="showPage('signup')">Create one</a></div>
+      </div>
+    </div>
+    <div class="auth-deco">
+      <div class="auth-deco-inner">
+        <h2>Measure with confidence</h2>
+        <p>Join engineers and builders who rely on QMA for accurate length calculations across any unit system.</p>
+        <div class="deco-stat">
+          <div class="deco-stat-item"><div class="num">4+</div><div class="lbl">Unit Types</div></div>
+          <div class="deco-stat-item"><div class="num">5</div><div class="lbl">Operations</div></div>
+          <div class="deco-stat-item"><div class="num">&infin;</div><div class="lbl">History</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNUP -->
+<div id="page-signup" class="page">
+  <nav class="navbar">
+    <div class="logo" onclick="showPage('home')">Q<span>MA</span></div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" style="cursor:pointer">&larr; Home</a></li>
+      <li class="nav-cta"><a onclick="showPage('login')" style="cursor:pointer">Sign In</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-ghost btn-sm" onclick="goBack()">← Go Back</button>
+    </div>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-form-col">
+      <div class="auth-panel">
+        <h2>Create account</h2>
+        <p class="sub">Get started with QMA — it's free</p>
+        <div id="signup-alert" class="alert alert-err"></div>
+        <div id="signup-ok" class="alert alert-ok"></div>
+        <div class="fields">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="signup-name" placeholder="Your name" autocomplete="name"/>
+            <span class="field-error" id="signup-name-err"></span>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"/>
+            <span class="field-error" id="signup-email-err"></span>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="pw-toggle">
+              <input type="password" id="signup-password" placeholder="Min. 6 characters" autocomplete="new-password"/>
+              <button type="button" onclick="togglePw('signup-password',this)" tabindex="-1" class="pw-btn">Show</button>
+            </div>
+            <span class="field-error" id="signup-pw-err"></span>
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select id="signup-role">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-full" id="signup-btn" onclick="doSignup()">
+            <div class="spin"></div><span>Create Account</span>
+          </button>
+        </div>
+        <div class="auth-switch">Already have an account? <a onclick="showPage('login')">Sign in</a></div>
+      </div>
+    </div>
+    <div class="auth-deco">
+      <div class="auth-deco-inner">
+        <h2>Start measuring today</h2>
+        <p>A powerful measurement engine at your fingertips — add, subtract, divide, compare and convert lengths instantly.</p>
+        <div class="deco-stat">
+          <div class="deco-stat-item"><div class="num">JWT</div><div class="lbl">Auth</div></div>
+          <div class="deco-stat-item"><div class="num">BCrypt</div><div class="lbl">Hashed</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP DASHBOARD -->
+<div id="page-app" class="page">
+  <nav class="navbar">
+    <div class="logo" onclick="showPage('home')" style="cursor:pointer">Q<span>MA</span></div>
+    <div id="nav-user-area">
+      <span class="nav-user-badge" id="nav-username">User</span>
+      <button id="guest-btn" class="btn btn-ghost btn-sm" onclick="showPage('login')" style="display:none;">LOGIN</button>
+      <button id="signup-btn" class="btn btn-primary btn-sm" onclick="showPage('signup')" style="display:none;">Sign Up</button>
+      <button id="logout-btn" class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
+    </div>
+    <div class="nav-right">
+      <button class="btn btn-ghost btn-sm" onclick="goBack()">← Go Back</button>
+    </div>
+  </nav>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">Q<span>MA</span></div>
+      <div class="sidebar-section">Operations</div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showView('add')" id="nav-add" class="active"><span class="icon">+</span> Add</a></li>
+        <li><a onclick="showView('subtract')" id="nav-subtract"><span class="icon">-</span> Subtract</a></li>
+        <li><a onclick="showView('divide')" id="nav-divide"><span class="icon">/</span> Divide</a></li>
+        <li><a onclick="showView('compare')" id="nav-compare"><span class="icon">=</span> Compare</a></li>
+        <li><a onclick="showView('convert')" id="nav-convert"><span class="icon">~</span> Convert</a></li>
+      </ul>
+      <div class="sidebar-section">Data</div>
+      <ul class="sidebar-nav">
+        <li><a onclick="showView('history')" id="nav-history"><span class="icon">H</span> History</a></li>
+      </ul>
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <strong id="sidebar-name">—</strong>
+          <span id="sidebar-role">—</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="app-main">
+
+      <!-- ADD VIEW -->
+      <div class="app-view active" id="view-add">
+        <div class="view-header"><h2>Add Quantities</h2><p>Add two measurements — unit conversion handled automatically.</p></div>
+        <div class="measurement-type-selector">
+          <label>Measurement Type:</label>
+          <select id="add-measurement-type" onchange="updateUnitsForOperation('add'); updateAvailableOperations(this.value)">
+            <option value="Length">Length</option>
+            <option value="Temperature">Temperature</option>
+            <option value="Volume">Volume</option>
+            <option value="Weight">Weight</option>
+          </select>
+        </div>
+        <div class="op-card">
+          <div class="op-card-header">
+            <div class="op-card-icon" style="background:#d1fae5">+</div>
+            <div><h3>Addition</h3><p>Result expressed in the unit of the first quantity.</p></div>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-block"><div class="qty-block-label">First Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="add-v1" placeholder="e.g. 3" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="add-u1"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+            <div class="qty-block"><div class="qty-block-label">Second Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="add-v2" placeholder="e.g. 12" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="add-u2"><option value="INCHES">Inches</option><option value="FEET">Feet</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+          </div>
+          <div id="add-alert" class="alert alert-err mb-16"></div>
+          <div class="flex-row mb-20">
+            <button class="btn btn-primary" id="add-btn" onclick="doOperation('add')"><div class="spin"></div><span>Calculate</span></button>
+            <button class="btn btn-ghost btn-sm" onclick="clearOp('add')">Clear</button>
+          </div>
+          <div class="result-box" id="add-result"><div><div class="result-label">Sum</div><div class="result-empty">Enter values and press Calculate</div></div></div>
+        </div>
+      </div>
+
+      <!-- SUBTRACT VIEW -->
+      <div class="app-view" id="view-subtract">
+        <div class="view-header"><h2>Subtract Quantities</h2><p>Subtract the second measurement from the first.</p></div>
+        <div class="measurement-type-selector">
+          <label>Measurement Type:</label>
+          <select id="sub-measurement-type" onchange="updateUnitsForOperation('sub'); updateAvailableOperations(this.value)">
+            <option value="Length">Length</option>
+            <option value="Temperature">Temperature</option>
+            <option value="Volume">Volume</option>
+            <option value="Weight">Weight</option>
+          </select>
+        </div>
+        <div class="op-card">
+          <div class="op-card-header">
+            <div class="op-card-icon" style="background:#fee2e2">-</div>
+            <div><h3>Subtraction</h3><p>Result expressed in the unit of the first quantity.</p></div>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-block"><div class="qty-block-label">First Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="sub-v1" placeholder="e.g. 5" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="sub-u1"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+            <div class="qty-block"><div class="qty-block-label">Second Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="sub-v2" placeholder="e.g. 24" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="sub-u2"><option value="INCHES">Inches</option><option value="FEET">Feet</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+          </div>
+          <div id="sub-alert" class="alert alert-err mb-16"></div>
+          <div class="flex-row mb-20">
+            <button class="btn btn-primary" id="sub-btn" onclick="doOperation('subtract')"><div class="spin"></div><span>Calculate</span></button>
+            <button class="btn btn-ghost btn-sm" onclick="clearOp('sub')">Clear</button>
+          </div>
+          <div class="result-box" id="sub-result"><div><div class="result-label">Difference</div><div class="result-empty">Enter values and press Calculate</div></div></div>
+        </div>
+      </div>
+
+      <!-- DIVIDE VIEW -->
+      <div class="app-view" id="view-divide">
+        <div class="view-header"><h2>Divide Quantities</h2><p>Get the dimensionless ratio of two measurements.</p></div>
+        <div class="measurement-type-selector">
+          <label>Measurement Type:</label>
+          <select id="div-measurement-type" onchange="updateUnitsForOperation('div'); updateAvailableOperations(this.value)">
+            <option value="Length">Length</option>
+            <option value="Temperature">Temperature</option>
+            <option value="Volume">Volume</option>
+            <option value="Weight">Weight</option>
+          </select>
+        </div>
+        <div class="op-card">
+          <div class="op-card-header">
+            <div class="op-card-icon" style="background:#fef3c7">/</div>
+            <div><h3>Division</h3><p>Returns a dimensionless ratio — First / Second.</p></div>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-block"><div class="qty-block-label">Dividend (First)</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="div-v1" placeholder="e.g. 6" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="div-u1"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+            <div class="qty-block"><div class="qty-block-label">Divisor (Second)</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="div-v2" placeholder="e.g. 2" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="div-u2"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+          </div>
+          <div id="div-alert" class="alert alert-err mb-16"></div>
+          <div class="flex-row mb-20">
+            <button class="btn btn-primary" id="div-btn" onclick="doOperation('divide')"><div class="spin"></div><span>Calculate</span></button>
+            <button class="btn btn-ghost btn-sm" onclick="clearOp('div')">Clear</button>
+          </div>
+          <div class="result-box" id="div-result"><div><div class="result-label">Ratio</div><div class="result-empty">Enter values and press Calculate</div></div></div>
+        </div>
+      </div>
+
+      <!-- COMPARE VIEW -->
+      <div class="app-view" id="view-compare">
+        <div class="view-header"><h2>Compare Quantities</h2><p>Check if two measurements are equivalent after unit conversion.</p></div>
+        <div class="measurement-type-selector">
+          <label>Measurement Type:</label>
+          <select id="cmp-measurement-type" onchange="updateUnitsForOperation('cmp'); updateAvailableOperations(this.value)">
+            <option value="Length">Length</option>
+            <option value="Temperature">Temperature</option>
+            <option value="Volume">Volume</option>
+            <option value="Weight">Weight</option>
+          </select>
+        </div>
+        <div class="op-card">
+          <div class="op-card-header">
+            <div class="op-card-icon" style="background:#ede9fe">=</div>
+            <div><h3>Comparison</h3><p>Normalises both values to base unit, then checks equality.</p></div>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-block"><div class="qty-block-label">First Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="cmp-v1" placeholder="e.g. 1" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="cmp-u1"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+            <div class="qty-block"><div class="qty-block-label">Second Quantity</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="cmp-v2" placeholder="e.g. 12" step="any"/></div>
+              <div class="form-group"><label>Unit</label><select id="cmp-u2"><option value="INCHES">Inches</option><option value="FEET">Feet</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+          </div>
+          <div id="cmp-alert" class="alert alert-err mb-16"></div>
+          <div class="flex-row mb-16">
+            <button class="btn btn-primary" id="cmp-btn" onclick="doCompare()"><div class="spin"></div><span>Compare</span></button>
+            <button class="btn btn-ghost btn-sm" onclick="clearOp('cmp')">Clear</button>
+          </div>
+          <div id="cmp-verdict" class="compare-verdict pending" style="display:none">
+            <span class="verdict-icon" id="cmp-icon">...</span>
+            <span id="cmp-text">Awaiting input...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONVERT VIEW -->
+      <div class="app-view" id="view-convert">
+        <div class="view-header"><h2>Convert Units</h2><p>Convert a measurement to any compatible unit.</p></div>
+        <div class="measurement-type-selector">
+          <label>Measurement Type:</label>
+          <select id="cvt-measurement-type" onchange="updateUnitsForOperation('cvt'); updateAvailableOperations(this.value)">
+            <option value="Length">Length</option>
+            <option value="Temperature">Temperature</option>
+            <option value="Volume">Volume</option>
+            <option value="Weight">Weight</option>
+          </select>
+        </div>
+        <div class="op-card">
+          <div class="op-card-header">
+            <div class="op-card-icon" style="background:#fce7f3">~</div>
+            <div><h3>Unit Conversion</h3><p>Supports feet, inches, yards, and centimetres.</p></div>
+          </div>
+          <div class="qty-grid">
+            <div class="qty-block"><div class="qty-block-label">Source Value</div><div class="qty-inputs">
+              <div class="form-group"><label>Value</label><input type="number" id="cvt-v1" placeholder="e.g. 1" step="any"/></div>
+              <div class="form-group"><label>From</label><select id="cvt-u1"><option value="FEET">Feet</option><option value="INCHES">Inches</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div></div>
+            <div class="qty-block"><div class="qty-block-label">Target Unit</div>
+              <div class="form-group"><label>Convert To</label><select id="cvt-u2"><option value="INCHES">Inches</option><option value="FEET">Feet</option><option value="YARDS">Yards</option><option value="CENTIMETERS">cm</option></select></div>
+            </div>
+          </div>
+          <div id="cvt-alert" class="alert alert-err mb-16"></div>
+          <div class="flex-row mb-20">
+            <button class="btn btn-primary" id="cvt-btn" onclick="doConvert()"><div class="spin"></div><span>Convert</span></button>
+            <button class="btn btn-ghost btn-sm" onclick="clearOp('cvt')">Clear</button>
+          </div>
+          <div class="result-box" id="cvt-result"><div><div class="result-label">Converted Value</div><div class="result-empty">Enter a value and press Convert</div></div></div>
+        </div>
+      </div>
+
+      <!-- HISTORY VIEW -->
+      <div class="app-view" id="view-history">
+        <div class="view-header">
+          <div class="flex-row space">
+            <div><h2>Operation History</h2><p>All past calculations from Database.</p></div>
+            <button class="btn btn-amber btn-sm" onclick="loadHistory()">Refresh</button>
+          </div>
+        </div>
+        <div id="history-alert" class="alert alert-err mb-16"></div>
+        <div class="hist-meta" id="history-meta"></div>
+        <div class="hist-table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Operation</th><th>First</th><th>Second</th><th>Result</th><th>Type</th></tr></thead>
+            <tbody id="history-body"><tr><td colspan="6" class="hist-empty">Click Refresh to load history.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/operations.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
