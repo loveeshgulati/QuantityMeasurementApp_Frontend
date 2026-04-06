@@ -1,0 +1,366 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* ---- Simple Dashboard ---- */
+.dashboard-simple {
+  min-height: 100vh;
+  background: #f8f9fa;
+  color: #2d3748;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.simple-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.simple-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge.guest {
+  background: #fbbf24;
+  color: #92400e;
+}
+
+.badge.auth {
+  background: #34d399;
+  color: #065f46;
+}
+
+.btn-logout {
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-logout:hover {
+  background: #cbd5e0;
+}
+
+/* Operation Buttons */
+.op-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.op-buttons button {
+  background: #e2e8f0;
+  color: #4a5568;
+  border: 1px solid #cbd5e0;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.op-buttons button:hover {
+  background: #cbd5e0;
+  color: #2d3748;
+}
+
+.op-buttons button.active {
+  background: #4299e1;
+  color: #fff;
+  border-color: #4299e1;
+}
+
+/* Active Panel */
+.active-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.operation-content h2 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Form Row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 12px;
+  color: #718096;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.input-group input,
+.input-group select {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  color: #2d3748;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Dual Input (for compare, add, subtract, divide) */
+.dual-input {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.input-block {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.input-block h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #718096;
+  font-weight: 600;
+}
+
+.input-block input,
+.input-block select {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #2d3748;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.input-block input:focus,
+.input-block select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.vs {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4299e1;
+}
+
+/* Action Button */
+.btn-action {
+  background: #4299e1;
+  color: #fff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-action:hover:not(:disabled) {
+  background: #3182ce;
+}
+
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error & Results */
+.error-msg {
+  color: #e53e3e;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.result-box {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  color: #2d3748;
+}
+
+.result-box div {
+  padding: 4px 0;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.result-box strong {
+  color: #2d3748;
+}
+
+/* History */
+.history-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.history-tabs button {
+  background: #f7fafc;
+  color: #718096;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.history-tabs button.active {
+  background: #4299e1;
+  color: #fff;
+  border-color: #4299e1;
+}
+
+.loading,
+.empty {
+  color: #a0aec0;
+  padding: 20px 0;
+}
+
+.history-list {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  color: #4a5568;
+}
+
+.history-list.error {
+  border-color: #fc8181;
+}
+
+.history-entry {
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.history-entry span {
+  color: #a0aec0;
+}
+
+.guest-notice {
+  background: #fefcbf;
+  color: #744210;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .dual-input {
+    grid-template-columns: 1fr;
+  }
+  
+  .vs {
+    text-align: center;
+  }
+  
+  .op-buttons {
+    justify-content: center;
+  }
+  
+  .op-buttons button {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+/* Guest Dropdown */
+.user-info {
+  position: relative;
+}
+
+.guest-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 60px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+  z-index: 100;
+}
+
+.guest-dropdown button {
+  padding: 10px 16px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.guest-dropdown button:hover {
+  background: #e5e7eb;
+}
