@@ -1,0 +1,291 @@
+<div class="dashboard-simple">
+  
+  <!-- Header -->
+  <header class="simple-header">
+    <h1>📐 Quantity Measurement</h1>
+    <div class="user-info">
+      <span *ngIf="isGuest" class="badge guest" (click)="toggleGuestMenu()" style="cursor: pointer;">👤 Guest </span>
+      <div *ngIf="isGuest && showGuestMenu" class="guest-dropdown">
+        <button (click)="goToLogin()"> Log In</button>
+        <button (click)="goToSignup()"> Sign Up</button>
+      </div>
+      <span *ngIf="!isGuest" class="badge auth">✅ Logged in</span>
+      <button class="btn-logout" (click)="logout()">Exit</button>
+    </div>
+  </header>
+
+  <!-- Operation Buttons -->
+  <div class="op-buttons">
+    <button [class.active]="activeTab==='convert'" (click)="setTab('convert')">🔄 Convert</button>
+    <button [class.active]="activeTab==='compare'" (click)="setTab('compare')">⚖️ Compare</button>
+    <button [class.active]="activeTab==='add'" (click)="setTab('add')">➕ Add</button>
+    <button [class.active]="activeTab==='subtract'" (click)="setTab('subtract')">➖ Subtract</button>
+    <button [class.active]="activeTab==='divide'" (click)="setTab('divide')">➗ Divide</button>
+    <button [class.active]="activeTab==='history'" (click)="setTab('history')">📋 History</button>
+  </div>
+
+  <!-- Active Operation Panel -->
+  <div class="active-panel">
+    
+    <!-- CONVERT -->
+    <div *ngIf="activeTab==='convert'" class="operation-content">
+      <h2>Convert Units</h2>
+      <div class="form-row">
+        <div class="input-group">
+          <label>Value</label>
+          <input type="number" [(ngModel)]="convertValue" placeholder="e.g. 100" />
+        </div>
+        <div class="input-group">
+          <label>From</label>
+          <select [(ngModel)]="convertFromCategory" (change)="onConvertFromCategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="convertFrom">
+            <option *ngFor="let u of unitCategories[convertFromCategory]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>To</label>
+          <select [(ngModel)]="convertToCategory" (change)="onConvertToCategoryChange()">
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+            <option value="volume">Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="convertTo">
+            <option *ngFor="let u of unitCategories[convertToCategory]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" (click)="onConvert()" [disabled]="loading">
+        {{ loading ? 'Converting...' : '🔄 Convert Now' }}
+      </button>
+      <div class="error-msg" *ngIf="convertError">{{ convertError }}</div>
+      <div class="result-box" *ngIf="convertResult">
+        <div *ngFor="let entry of resultEntries(convertResult)">
+          <strong>{{ entry.key }}:</strong> {{ entry.value }}
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARE -->
+    <div *ngIf="activeTab==='compare'" class="operation-content">
+      <h2>Compare Quantities</h2>
+      <div class="dual-input">
+        <div class="input-block">
+          <h4>First Value</h4>
+          <input type="number" [(ngModel)]="compareValue1" placeholder="e.g. 5" />
+          <select [(ngModel)]="compareUnit1Category" (change)="onCompareUnit1CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="compareUnit1">
+            <option *ngFor="let u of unitCategories[compareUnit1Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="vs">VS</div>
+        <div class="input-block">
+          <h4>Second Value</h4>
+          <input type="number" [(ngModel)]="compareValue2" placeholder="e.g. 3" />
+          <select [(ngModel)]="compareUnit2Category" (change)="onCompareUnit2CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="compareUnit2">
+            <option *ngFor="let u of unitCategories[compareUnit2Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" (click)="onCompare()" [disabled]="loading">
+        {{ loading ? 'Comparing...' : '⚖️ Compare Now' }}
+      </button>
+      <div class="error-msg" *ngIf="compareError">{{ compareError }}</div>
+      <div class="result-box" *ngIf="compareResult">
+        <div *ngFor="let entry of resultEntries(compareResult)">
+          <strong>{{ entry.key }}:</strong> 
+          <span *ngIf="entry.key === 'result' || entry.key === 'Result'">
+            {{ entry.value === 1 || entry.value === true ? 'Equal' : 'Not Equal' }}
+          </span>
+          <span *ngIf="entry.key !== 'result' && entry.key !== 'Result'">{{ entry.value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD -->
+    <div *ngIf="activeTab==='add'" class="operation-content">
+      <h2>Add Quantities</h2>
+      <div class="dual-input">
+        <div class="input-block">
+          <h4>First Value</h4>
+          <input type="number" [(ngModel)]="addValue1" placeholder="e.g. 5" />
+          <select [(ngModel)]="addUnit1Category" (change)="onAddUnit1CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="addUnit1">
+            <option *ngFor="let u of unitCategories[addUnit1Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="vs">+</div>
+        <div class="input-block">
+          <h4>Second Value</h4>
+          <input type="number" [(ngModel)]="addValue2" placeholder="e.g. 3" />
+          <select [(ngModel)]="addUnit2Category" (change)="onAddUnit2CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="addUnit2">
+            <option *ngFor="let u of unitCategories[addUnit2Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" (click)="onAdd()" [disabled]="loading">
+        {{ loading ? 'Adding...' : '➕ Add Now' }}
+      </button>
+      <div class="error-msg" *ngIf="addError">{{ addError }}</div>
+      <div class="result-box" *ngIf="addResult">
+        <div *ngFor="let entry of resultEntries(addResult)">
+          <strong>{{ entry.key }}:</strong> {{ entry.value }}
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBTRACT -->
+    <div *ngIf="activeTab==='subtract'" class="operation-content">
+      <h2>Subtract Quantities</h2>
+      <div class="dual-input">
+        <div class="input-block">
+          <h4>First Value</h4>
+          <input type="number" [(ngModel)]="subtractValue1" placeholder="e.g. 5" />
+          <select [(ngModel)]="subtractUnit1Category" (change)="onSubtractUnit1CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature">Temperature</option>
+          </select>
+          <select [(ngModel)]="subtractUnit1">
+            <option *ngFor="let u of unitCategories[subtractUnit1Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="vs">−</div>
+        <div class="input-block">
+          <h4>Second Value</h4>
+          <input type="number" [(ngModel)]="subtractValue2" placeholder="e.g. 3" />
+          <select [(ngModel)]="subtractUnit2Category" (change)="onSubtractUnit2CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="subtractUnit2">
+            <option *ngFor="let u of unitCategories[subtractUnit2Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" (click)="onSubtract()" [disabled]="loading">
+        {{ loading ? 'Subtracting...' : '➖ Subtract Now' }}
+      </button>
+      <div class="error-msg" *ngIf="subtractError">{{ subtractError }}</div>
+      <div class="result-box" *ngIf="subtractResult">
+        <div *ngFor="let entry of resultEntries(subtractResult)">
+          <strong>{{ entry.key }}:</strong> {{ entry.value }}
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDE -->
+    <div *ngIf="activeTab==='divide'" class="operation-content">
+      <h2>Divide Quantities</h2>
+      <div class="dual-input">
+        <div class="input-block">
+          <h4>First Value</h4>
+          <input type="number" [(ngModel)]="divideValue1" placeholder="e.g. 5" />
+          <select [(ngModel)]="divideUnit1Category" (change)="onDivideUnit1CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="divideUnit1">
+            <option *ngFor="let u of unitCategories[divideUnit1Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+        <div class="vs">÷</div>
+        <div class="input-block">
+          <h4>Second Value</h4>
+          <input type="number" [(ngModel)]="divideValue2" placeholder="e.g. 3" />
+          <select [(ngModel)]="divideUnit2Category" (change)="onDivideUnit2CategoryChange()">
+            <option value="length"> Length</option>
+            <option value="weight"> Weight</option>
+            <option value="volume"> Volume</option>
+            <option value="temperature"> Temperature</option>
+          </select>
+          <select [(ngModel)]="divideUnit2">
+            <option *ngFor="let u of unitCategories[divideUnit2Category]" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" (click)="onDivide()" [disabled]="loading">
+        {{ loading ? 'Dividing...' : '➗ Divide Now' }}
+      </button>
+      <div class="error-msg" *ngIf="divideError">{{ divideError }}</div>
+      <div class="result-box" *ngIf="divideResult">
+        <div *ngFor="let entry of resultEntries(divideResult)">
+          <strong>{{ entry.key }}:</strong> {{ entry.value }}
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div *ngIf="activeTab==='history'" class="operation-content">
+      <h2>Operation History</h2>
+      
+      <div class="guest-notice" *ngIf="isGuest">
+        ℹ️ History is only available to logged-in users.
+      </div>
+
+      <div *ngIf="!isGuest">
+        <div class="history-tabs">
+          <button [class.active]="historyView==='all'" (click)="switchHistory('all')">All</button>
+          <button [class.active]="historyView==='errored'" (click)="switchHistory('errored')">Errors</button>
+        </div>
+
+        <div *ngIf="historyLoading" class="loading">Loading...</div>
+
+        <div *ngIf="!historyLoading">
+          <div *ngIf="historyView==='all'">
+            <div *ngIf="history.length === 0" class="empty">No history yet.</div>
+            <div class="history-list" *ngFor="let item of history">
+              <div class="history-entry" *ngFor="let entry of resultEntries(item)">
+                <span>{{ entry.key }}:</span> {{ entry.value }}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="historyView==='errored'">
+            <div *ngIf="erroredHistory.length === 0" class="empty">No errors. All good! </div>
+            <div class="history-list error" *ngFor="let item of erroredHistory">
+              <div class="history-entry" *ngFor="let entry of resultEntries(item)">
+                <span>{{ entry.key }}:</span> {{ entry.value }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
