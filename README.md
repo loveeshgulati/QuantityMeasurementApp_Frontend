@@ -117,6 +117,3 @@ Each operation includes:
 - "Logout" button replaces login options
 - JWT token stored securely in localStorage
 
-### Login Credentials
-- **Email**: test@example.com
-- **Password**: password123
