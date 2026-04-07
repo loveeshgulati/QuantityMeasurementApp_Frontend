@@ -5,7 +5,7 @@ import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly BASE = 'http://localhost:5263/api/Auth';
+  private readonly BASE = 'https://quantitymeasurementapp-yegr.onrender.com/api/Auth';
   private _isGuest = false;
   isLoggedIn$ = new BehaviorSubject<boolean>(this.hasToken());
 

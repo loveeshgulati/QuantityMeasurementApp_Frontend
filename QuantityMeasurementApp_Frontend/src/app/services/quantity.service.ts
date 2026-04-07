@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class QuantityService {
-  private readonly BASE = 'http://localhost:5263/api/v1/quantities';
+  private readonly BASE = 'https://quantitymeasurementapp-yegr.onrender.com/api/v1/quantities';
 
   constructor(private http: HttpClient) {}
 
